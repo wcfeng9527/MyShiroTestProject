@@ -10,6 +10,7 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.HashRequest;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.SimpleByteSource;
 import org.junit.Test;
@@ -59,5 +60,24 @@ public class CryptographyTest {
 		//解密
 		String text2 = new String(aesCipherService.decrypt(Hex.decode(encrptTesxt), key.getEncoded()).getBytes());
 		Assert.assertEquals(text, text2);
+	}
+	
+	@Test
+	public void MD5Test(){
+		String algorithmName="md5";
+		String username="liu";
+		String password="234";
+		String salt1=username;
+//		String salt2=new SecureRandomNumberGenerator().nextBytes().toHex();
+		String salt2 ="0072273a5d87322163795118fdd7c45e";
+		System.out.println(salt2);
+		ByteSource salt = ByteSource.Util.bytes(salt1+salt2);
+		System.out.println(salt);
+		int hsahIterations=2;
+		SimpleHash hash = new SimpleHash(algorithmName,password,salt,hsahIterations);
+		
+		String encodedPassword = hash.toHex();
+		
+		System.out.println(encodedPassword);
 	}
 }
